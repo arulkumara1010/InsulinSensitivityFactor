@@ -7,6 +7,7 @@ void main() {
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -21,93 +22,188 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
+  @override
+  _LoginPageState createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  bool rememberMe = false;
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-
-  LoginPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        children: [
-          Container(
-            decoration: const BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage('assets/images/1053265.png'),
-                fit: BoxFit.cover,
+      body: GestureDetector(
+        onTap: () {
+          FocusScope.of(context).unfocus(); // Unfocus the text fields
+        },
+        child: Stack(
+          children: [
+            Container(
+              decoration: const BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage('assets/images/1053265.png'),
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
-          ),
-          Container(
-            color: Colors.black.withOpacity(0.9),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                 Text(
-                  'H E L L 0',
-                  style: GoogleFonts.inter(  // Use the custom font name here
-                    fontSize: 32.0,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
-                ),
-                TextField(
-                  cursorColor: Colors.white,
-                  controller: emailController,
-                  style: const TextStyle(color: Colors.white),
-                  decoration: const InputDecoration(
-                    labelText: 'Email',
-                    labelStyle: TextStyle(color: Colors.white70),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.greenAccent, width: 1.0),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.white54, width: 1.0),
-                    ),
-
-                    filled: true,
-                    fillColor: Colors.black26,
-                  ),
-                ),
-                const SizedBox(height: 16.0),
-                TextField(
-                  cursorColor: Colors.white,
-                  controller: passwordController,
-                  style: const TextStyle(color: Colors.white),
-                  decoration: const InputDecoration(
-                    labelText: 'Password',
-                    labelStyle: TextStyle(color: Colors.white70),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.greenAccent, width: 1.0),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.white54, width: 1.0),
-                    ),
-                    filled: true,
-                    fillColor: Colors.black26,
-                  ),
-                  obscureText: true,
-                ),
-                const SizedBox(height: 16.0),
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.greenAccent,
-                  ),
-                  onPressed: () {},
-                  child: const Text(
-                    'Login',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ),
-              ],
+            Container(
+              color: Colors.black.withOpacity(0.9),
             ),
-          ),
-        ],
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Text.rich(
+                    TextSpan(
+                      children: [
+                        TextSpan(
+                          text: 'HELLO',
+                          style: GoogleFonts.inter(
+                            fontSize: 48.0,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                            letterSpacing: 20,
+                          ),
+                        ),
+                        TextSpan(
+                          text: '!',
+                          style: GoogleFonts.inter(
+                            fontSize: 48.0,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.greenAccent,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 48.0),
+                  // Set a fixed width for the TextField
+                  SizedBox(
+                    width: 380.0, // Set the desired width
+                    child: TextField(
+                      cursorColor: Colors.white,
+                      controller: emailController,
+                      style: const TextStyle(color: Colors.white),
+                      decoration: InputDecoration(
+                        prefixIcon: const Icon(
+                          Icons.email_outlined,
+                          color: Colors.white70,
+                          size: 18.0,
+                        ),
+                        labelText: 'Email',
+                        labelStyle: GoogleFonts.inter(color: Colors.white70),
+                        focusedBorder: const OutlineInputBorder(
+                          borderSide:
+                              BorderSide(color: Colors.greenAccent, width: 1.0),
+                        ),
+                        enabledBorder: const OutlineInputBorder(
+                          borderSide:
+                              BorderSide(color: Colors.white54, width: 1.0),
+                        ),
+                        filled: true,
+                        fillColor: Colors.black26,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 16.0),
+                  SizedBox(
+                    width: 380.0, // Same width for the password TextField
+                    child: TextField(
+                      cursorColor: Colors.white,
+                      controller: passwordController,
+                      style: const TextStyle(color: Colors.white),
+                      decoration: InputDecoration(
+                        prefixIcon: const Icon(
+                          Icons.lock_outline,
+                          color: Colors.white70,
+                          size: 18.0,
+                        ),
+                        labelText: 'Password',
+                        labelStyle: GoogleFonts.inter(color: Colors.white70),
+                        focusedBorder: const OutlineInputBorder(
+                          borderSide:
+                              BorderSide(color: Colors.greenAccent, width: 1.0),
+                        ),
+                        enabledBorder: const OutlineInputBorder(
+                          borderSide:
+                              BorderSide(color: Colors.white54, width: 1.0),
+                        ),
+                        filled: true,
+                        fillColor: Colors.black26,
+                      ),
+                      obscureText: true,
+                    ),
+                  ),
+                  const SizedBox(height: 32.0),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        children: [
+                          Container(
+                            height: 48.0, // Match the TextField height
+                            alignment: Alignment.centerLeft,
+                            child: Checkbox(
+                              value: rememberMe,
+                              onChanged: (bool? value) {
+                                setState(() {
+                                  rememberMe = value ?? false;
+                                });
+                              },
+                              activeColor: Colors.greenAccent,
+                            ),
+                          ),
+                          // const SizedBox(width: 8.0),
+                          Text(
+                            'Remember me?',
+                            style: GoogleFonts.inter(color: Colors.white70),
+                          ),
+                        ],
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          // Handle forgot password
+                        },
+                        child: Text(
+                          'Forgot password?',
+                          style: GoogleFonts.inter(
+                              color: Colors.greenAccent,
+                              fontWeight: FontWeight.w500),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 16.0),
+                  SizedBox(
+                    width: 200.0, // Set the desired width
+                    height: 50.0, // Set the desired height
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.greenAccent, // Background color
+                        elevation: 8.0, // Button shadow elevation
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12.0), // Rounded corners
+                        ),
+                      ),
+                      onPressed: () {
+                        // Handle button press
+                      },
+                      child: Text(
+                        'LOGIN',
+                        style: GoogleFonts.inter(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 20.0, letterSpacing: 10.0),
+                      ),
+                    ),
+                  )
+
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
