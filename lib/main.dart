@@ -49,7 +49,7 @@ class LoginPage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                  Text(
-                  'Hello!',
+                  'H E L L 0',
                   style: GoogleFonts.inter(  // Use the custom font name here
                     fontSize: 32.0,
                     fontWeight: FontWeight.bold,
@@ -57,6 +57,7 @@ class LoginPage extends StatelessWidget {
                   ),
                 ),
                 TextField(
+                  cursorColor: Colors.white,
                   controller: emailController,
                   style: const TextStyle(color: Colors.white),
                   decoration: const InputDecoration(
@@ -68,12 +69,14 @@ class LoginPage extends StatelessWidget {
                     enabledBorder: OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.white54, width: 1.0),
                     ),
+
                     filled: true,
                     fillColor: Colors.black26,
                   ),
                 ),
                 const SizedBox(height: 16.0),
                 TextField(
+                  cursorColor: Colors.white,
                   controller: passwordController,
                   style: const TextStyle(color: Colors.white),
                   decoration: const InputDecoration(
