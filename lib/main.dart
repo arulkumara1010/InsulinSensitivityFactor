@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 void main() {
   runApp(const MyApp());
@@ -47,10 +48,9 @@ class LoginPage extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                const Text(
-                  'H E L L O',
-                  style: TextStyle(
-                    fontFamily: 'YourFontName',  // Use the custom font name here
+                 Text(
+                  'Hello!',
+                  style: GoogleFonts.inter(  // Use the custom font name here
                     fontSize: 32.0,
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
