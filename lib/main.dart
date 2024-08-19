@@ -17,13 +17,16 @@ class MyApp extends StatelessWidget {
         brightness: Brightness.dark,
         primarySwatch: Colors.blue,
       ),
-      home: LoginPage(),
+      home: const LoginPage(),
     );
   }
 }
 
 class LoginPage extends StatefulWidget {
+  const LoginPage({super.key});
+
   @override
+  // ignore: library_private_types_in_public_api
   _LoginPageState createState() => _LoginPageState();
 }
 
@@ -34,6 +37,8 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+
     return Scaffold(
       body: GestureDetector(
         onTap: () {
@@ -80,9 +85,9 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                   const SizedBox(height: 48.0),
-                  // Set a fixed width for the TextField
+                  // Set adaptive width for the TextField
                   SizedBox(
-                    width: 380.0, // Set the desired width
+                    width: screenWidth * 0.86, // 80% of screen width
                     child: TextField(
                       cursorColor: Colors.white,
                       controller: emailController,
@@ -110,7 +115,8 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   const SizedBox(height: 16.0),
                   SizedBox(
-                    width: 380.0, // Same width for the password TextField
+                    width: screenWidth *
+                        0.86, // Same width for the password TextField
                     child: TextField(
                       cursorColor: Colors.white,
                       controller: passwordController,
@@ -156,7 +162,7 @@ class _LoginPageState extends State<LoginPage> {
                               activeColor: Colors.greenAccent,
                             ),
                           ),
-                          // const SizedBox(width: 8.0),
+                          const SizedBox(width: 8.0),
                           Text(
                             'Remember me?',
                             style: GoogleFonts.inter(color: Colors.white70),
@@ -178,14 +184,16 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   const SizedBox(height: 16.0),
                   SizedBox(
-                    width: 200.0, // Set the desired width
+                    width:
+                        screenWidth * 0.5, // Set adaptive width for the button
                     height: 50.0, // Set the desired height
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.greenAccent, // Background color
                         elevation: 8.0, // Button shadow elevation
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12.0), // Rounded corners
+                          borderRadius:
+                              BorderRadius.circular(12.0), // Rounded corners
                         ),
                       ),
                       onPressed: () {
@@ -193,11 +201,14 @@ class _LoginPageState extends State<LoginPage> {
                       },
                       child: Text(
                         'LOGIN',
-                        style: GoogleFonts.inter(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 20.0, letterSpacing: 10.0),
+                        style: GoogleFonts.inter(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20.0,
+                            letterSpacing: 10.0),
                       ),
                     ),
                   )
-
                 ],
               ),
             ),
