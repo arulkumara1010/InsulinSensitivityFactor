@@ -17,13 +17,16 @@ class MyApp extends StatelessWidget {
         brightness: Brightness.dark,
         primarySwatch: Colors.blue,
       ),
-      home: LoginPage(),
+      home: const LoginPage(),
     );
   }
 }
 
 class LoginPage extends StatefulWidget {
+  const LoginPage({super.key});
+
   @override
+  // ignore: library_private_types_in_public_api
   _LoginPageState createState() => _LoginPageState();
 }
 
@@ -98,10 +101,12 @@ class _LoginPageState extends State<LoginPage> {
                         labelText: 'Email',
                         labelStyle: GoogleFonts.inter(color: Colors.white70),
                         focusedBorder: const OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.greenAccent, width: 1.0),
+                          borderSide:
+                              BorderSide(color: Colors.greenAccent, width: 1.0),
                         ),
                         enabledBorder: const OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.white54, width: 1.0),
+                          borderSide:
+                              BorderSide(color: Colors.white54, width: 1.0),
                         ),
                         filled: true,
                         fillColor: Colors.black26,
@@ -110,7 +115,8 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   const SizedBox(height: 16.0),
                   SizedBox(
-                    width: screenWidth * 0.86, // Same width for the password TextField
+                    width: screenWidth *
+                        0.86, // Same width for the password TextField
                     child: TextField(
                       cursorColor: Colors.white,
                       controller: passwordController,
@@ -124,10 +130,12 @@ class _LoginPageState extends State<LoginPage> {
                         labelText: 'Password',
                         labelStyle: GoogleFonts.inter(color: Colors.white70),
                         focusedBorder: const OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.greenAccent, width: 1.0),
+                          borderSide:
+                              BorderSide(color: Colors.greenAccent, width: 1.0),
                         ),
                         enabledBorder: const OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.white54, width: 1.0),
+                          borderSide:
+                              BorderSide(color: Colors.white54, width: 1.0),
                         ),
                         filled: true,
                         fillColor: Colors.black26,
@@ -176,14 +184,16 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   const SizedBox(height: 16.0),
                   SizedBox(
-                    width: screenWidth * 0.5, // Set adaptive width for the button
+                    width:
+                        screenWidth * 0.5, // Set adaptive width for the button
                     height: 50.0, // Set the desired height
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.greenAccent, // Background color
                         elevation: 8.0, // Button shadow elevation
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12.0), // Rounded corners
+                          borderRadius:
+                              BorderRadius.circular(12.0), // Rounded corners
                         ),
                       ),
                       onPressed: () {
@@ -191,7 +201,11 @@ class _LoginPageState extends State<LoginPage> {
                       },
                       child: Text(
                         'LOGIN',
-                        style: GoogleFonts.inter(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 20.0, letterSpacing: 10.0),
+                        style: GoogleFonts.inter(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20.0,
+                            letterSpacing: 10.0),
                       ),
                     ),
                   )
