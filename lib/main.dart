@@ -66,7 +66,7 @@ class _LoginPageState extends State<LoginPage> {
                     TextSpan(
                       children: [
                         TextSpan(
-                          text: 'Hello ',
+                          text: 'Hello',
                           style: GoogleFonts.inter(
                             fontSize: 48.0,
                             fontWeight: FontWeight.bold,
