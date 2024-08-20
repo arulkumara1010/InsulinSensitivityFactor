@@ -66,7 +66,7 @@ class _LoginPageState extends State<LoginPage> {
                     TextSpan(
                       children: [
                         TextSpan(
-                          text: 'Hello ',
+                          text: 'Hello',
                           style: GoogleFonts.inter(
                             fontSize: 48.0,
                             fontWeight: FontWeight.bold,
@@ -143,7 +143,7 @@ class _LoginPageState extends State<LoginPage> {
                       obscureText: true,
                     ),
                   ),
-                  const SizedBox(height: 32.0),
+                  const SizedBox(height: 16.0),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
