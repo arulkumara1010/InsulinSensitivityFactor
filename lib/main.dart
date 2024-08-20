@@ -74,7 +74,7 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                         ),
                         TextSpan(
-                          text: 'Arul!',
+                          text: 'User!',
                           style: GoogleFonts.inter(
                             fontSize: 48.0,
                             fontWeight: FontWeight.bold,
