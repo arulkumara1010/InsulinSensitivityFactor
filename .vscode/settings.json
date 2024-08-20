@@ -1,3 +1,5 @@
 {
-  "java.compile.nullAnalysis.mode": "automatic"
+  "java.compile.nullAnalysis.mode": "automatic",
+  "cmake.sourceDirectory": "C:/Users/arulk/StudioProjects/InsulinSensitivityFactor/windows",
+  "java.configuration.updateBuildConfiguration": "interactive"
 }
