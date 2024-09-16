@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "335238619507",
+    "project_id": "insf-bee60",
+    "storage_bucket": "insf-bee60.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:335238619507:android:a33192339bd07f1610a506",
+        "android_client_info": {
+          "package_name": "com.example.insulin_sensitivity_factor"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBdg0gDYMm5eWJq7CoaHnhLNmzo9cohIC8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
