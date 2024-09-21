@@ -4,8 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:insulin_sensitivity_factor/firebase_options.dart';
 
-
-void main() async{
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(const MyApp());
@@ -21,7 +20,12 @@ class MyApp extends StatelessWidget {
       title: 'Login UI',
       theme: ThemeData(
         brightness: Brightness.dark,
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.green,
+        textSelectionTheme: const TextSelectionThemeData(
+          cursorColor: Colors.white,
+          selectionColor: Colors.greenAccent,
+          selectionHandleColor: Colors.greenAccent,
+        ),
       ),
       home: const LoginPage(),
     );
@@ -40,15 +44,21 @@ class _LoginPageState extends State<LoginPage> {
   bool rememberMe = false;
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
+  String errorMessage = ''; // For displaying error messages
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
+    final screenWidth = MediaQuery
+        .of(context)
+        .size
+        .width;
 
     return Scaffold(
       body: GestureDetector(
         onTap: () {
-          FocusScope.of(context).unfocus(); // Unfocus the text fields
+          FocusScope.of(context).unfocus(); // Switch focus from the text fields
         },
         child: Stack(
           children: [
@@ -91,11 +101,9 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                   const SizedBox(height: 48.0),
-                  // Set adaptive width for the TextField
                   SizedBox(
-                    width: screenWidth * 0.86, // 80% of screen width
+                    width: screenWidth * 0.86,
                     child: TextField(
-                      cursorColor: Colors.white,
                       controller: emailController,
                       style: const TextStyle(color: Colors.white),
                       decoration: InputDecoration(
@@ -108,11 +116,11 @@ class _LoginPageState extends State<LoginPage> {
                         labelStyle: GoogleFonts.inter(color: Colors.white70),
                         focusedBorder: const OutlineInputBorder(
                           borderSide:
-                              BorderSide(color: Colors.greenAccent, width: 1.0),
+                          BorderSide(color: Colors.greenAccent, width: 1.0),
                         ),
                         enabledBorder: const OutlineInputBorder(
                           borderSide:
-                              BorderSide(color: Colors.white54, width: 1.0),
+                          BorderSide(color: Colors.white54, width: 1.0),
                         ),
                         filled: true,
                         fillColor: Colors.black26,
@@ -121,10 +129,8 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   const SizedBox(height: 16.0),
                   SizedBox(
-                    width: screenWidth *
-                        0.86, // Same width for the password TextField
+                    width: screenWidth * 0.86,
                     child: TextField(
-                      cursorColor: Colors.white,
                       controller: passwordController,
                       style: const TextStyle(color: Colors.white),
                       decoration: InputDecoration(
@@ -137,11 +143,11 @@ class _LoginPageState extends State<LoginPage> {
                         labelStyle: GoogleFonts.inter(color: Colors.white70),
                         focusedBorder: const OutlineInputBorder(
                           borderSide:
-                              BorderSide(color: Colors.greenAccent, width: 1.0),
+                          BorderSide(color: Colors.greenAccent, width: 1.0),
                         ),
                         enabledBorder: const OutlineInputBorder(
                           borderSide:
-                              BorderSide(color: Colors.white54, width: 1.0),
+                          BorderSide(color: Colors.white54, width: 1.0),
                         ),
                         filled: true,
                         fillColor: Colors.black26,
@@ -156,7 +162,7 @@ class _LoginPageState extends State<LoginPage> {
                       Row(
                         children: [
                           Container(
-                            height: 48.0, // Match the TextField height
+                            height: 48.0,
                             alignment: Alignment.centerLeft,
                             child: Checkbox(
                               value: rememberMe,
@@ -190,31 +196,37 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   const SizedBox(height: 16.0),
                   SizedBox(
-                    width:
-                        screenWidth * 0.5, // Set adaptive width for the button
-                    height: 50.0, // Set the desired height
+                    width: screenWidth * 0.5,
+                    height: 50.0,
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.greenAccent, // Background color
-                        elevation: 8.0, // Button shadow elevation
+                        backgroundColor: Colors.greenAccent,
+                        elevation: 8.0,
                         shape: RoundedRectangleBorder(
                           borderRadius:
-                              BorderRadius.circular(12.0), // Rounded corners
+                          BorderRadius.circular(12.0), // Rounded corners
                         ),
                       ),
-                      onPressed: () {
-                        // Handle button press
+                      onPressed: () async {
+                        FocusScope.of(context).unfocus();
+                        await login();
                       },
                       child: Text(
                         'LOGIN',
                         style: GoogleFonts.inter(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 20.0,
-                            letterSpacing: 10.0),
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20.0,
+                          letterSpacing: 10.0,
+                        ),
                       ),
                     ),
-                  )
+                  ),
+                  const SizedBox(height: 16.0),
+                  Text(
+                    errorMessage,
+                    style: const TextStyle(color: Colors.redAccent),
+                  ),
                 ],
               ),
             ),
@@ -222,5 +234,34 @@ class _LoginPageState extends State<LoginPage> {
         ),
       ),
     );
+  }
+
+  Future<void> login() async {
+    try {
+      // Attempt to sign in the user
+      await _auth.signInWithEmailAndPassword(
+        email: emailController.text.trim(),
+        password: passwordController.text.trim(),
+      );
+
+      // On successful login, show SnackBar
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Login successful!'),
+          backgroundColor: Colors.greenAccent,
+          // Set the color to indicate success
+          duration: Duration(
+              seconds: 2), // How long the SnackBar will be visible
+        ),
+      );
+
+      // You can also perform further actions, like navigating to another page
+      // Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomePage()));
+    } on FirebaseAuthException catch (e) {
+      setState(() {
+        errorMessage = e.message ?? 'An error occurred';
+
+      });
+    }
   }
 }
