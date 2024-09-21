@@ -3,9 +3,9 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:insulin_sensitivity_factor/firebase_options.dart';
+import 'register.dart';
 
-
-void main() async{
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(const MyApp());
@@ -21,7 +21,12 @@ class MyApp extends StatelessWidget {
       title: 'Login UI',
       theme: ThemeData(
         brightness: Brightness.dark,
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.green,
+        textSelectionTheme: const TextSelectionThemeData(
+          cursorColor: Colors.white,
+          selectionColor: Colors.greenAccent,
+          selectionHandleColor: Colors.greenAccent,
+        ),
       ),
       home: const LoginPage(),
     );
@@ -40,6 +45,9 @@ class _LoginPageState extends State<LoginPage> {
   bool rememberMe = false;
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
+  String errorMessage = ''; // For displaying error messages
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +56,7 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
       body: GestureDetector(
         onTap: () {
-          FocusScope.of(context).unfocus(); // Unfocus the text fields
+          FocusScope.of(context).unfocus(); // Switch focus from the text fields
         },
         child: Stack(
           children: [
@@ -90,12 +98,10 @@ class _LoginPageState extends State<LoginPage> {
                       ],
                     ),
                   ),
-                  const SizedBox(height: 48.0),
-                  // Set adaptive width for the TextField
+                  const SizedBox(height: 24.0),
                   SizedBox(
-                    width: screenWidth * 0.86, // 80% of screen width
+                    width: screenWidth * 0.86,
                     child: TextField(
-                      cursorColor: Colors.white,
                       controller: emailController,
                       style: const TextStyle(color: Colors.white),
                       decoration: InputDecoration(
@@ -121,10 +127,8 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   const SizedBox(height: 16.0),
                   SizedBox(
-                    width: screenWidth *
-                        0.86, // Same width for the password TextField
+                    width: screenWidth * 0.86,
                     child: TextField(
-                      cursorColor: Colors.white,
                       controller: passwordController,
                       style: const TextStyle(color: Colors.white),
                       decoration: InputDecoration(
@@ -156,7 +160,7 @@ class _LoginPageState extends State<LoginPage> {
                       Row(
                         children: [
                           Container(
-                            height: 48.0, // Match the TextField height
+                            height: 48.0,
                             alignment: Alignment.centerLeft,
                             child: Checkbox(
                               value: rememberMe,
@@ -190,31 +194,57 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   const SizedBox(height: 16.0),
                   SizedBox(
-                    width:
-                        screenWidth * 0.5, // Set adaptive width for the button
-                    height: 50.0, // Set the desired height
+                    width: screenWidth * 0.5,
+                    height: 50.0,
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.greenAccent, // Background color
-                        elevation: 8.0, // Button shadow elevation
+                        backgroundColor: Colors.greenAccent,
+                        elevation: 8.0,
                         shape: RoundedRectangleBorder(
                           borderRadius:
                               BorderRadius.circular(12.0), // Rounded corners
                         ),
                       ),
-                      onPressed: () {
-                        // Handle button press
+                      onPressed: () async {
+                        FocusScope.of(context).unfocus();
+                        await login();
                       },
                       child: Text(
                         'LOGIN',
                         style: GoogleFonts.inter(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 20.0,
-                            letterSpacing: 10.0),
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20.0,
+                          letterSpacing: 10.0,
+                        ),
                       ),
                     ),
-                  )
+                  ), // This pushes the widgets above upwards
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "Don't have an account?",
+                        style: GoogleFonts.inter(color: Colors.white70),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const RegisterPage()),
+                          ); // Handle registration action
+                        },
+                        child: Text(
+                          'Register Now',
+                          style: GoogleFonts.inter(
+                            color: Colors.greenAccent,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ],
               ),
             ),
@@ -222,5 +252,50 @@ class _LoginPageState extends State<LoginPage> {
         ),
       ),
     );
+  }
+
+  Future<void> login() async {
+    final email = emailController.text.trim();
+    final password = passwordController.text.trim();
+
+    if (email.isEmpty || password.isEmpty) {
+      // Show a SnackBar if email or password is empty
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Please enter both email and password.'),
+          backgroundColor: Colors.redAccent,
+          duration: Duration(seconds: 2),
+        ),
+      );
+      return; // Stop execution if fields are empty
+    }
+
+    try {
+      // Attempt to sign in the user
+      await _auth.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+
+      // On successful login, show SnackBar
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Login successful!'),
+          backgroundColor: Colors.greenAccent,
+          duration: Duration(seconds: 2),
+        ),
+      );
+
+      // Perform further actions like navigation here
+      // Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomePage()));
+    } on FirebaseAuthException catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Please enter valid credentials'),
+          backgroundColor: Colors.redAccent,
+          duration: Duration(seconds: 2),
+        ),
+      );
+    }
   }
 }
