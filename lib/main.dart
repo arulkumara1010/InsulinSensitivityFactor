@@ -204,6 +204,25 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                       onPressed: () {
                         // Handle button press
+                        final email = emailController.text;
+                        final password = passwordController.text;
+                        FirebaseAuth.instance.signInWithEmailAndPassword(
+                          email: email,
+                          password: password,
+                        ).then((userCredential) {
+                          print('Login successful');
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => HomePage(),
+                            ),
+                          );
+                        }).catchError((error) {
+                          print('Login failed: $error');
+                        });
+                      
+
+
                       },
                       child: Text(
                         'LOGIN',
@@ -220,6 +239,57 @@ class _LoginPageState extends State<LoginPage> {
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class HomePage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      
+      body: Center(
+        child: Stack(
+          children: [
+            
+         
+            Container(
+              color: Colors.white,
+            ),
+            Container(
+              alignment: Alignment.topCenter,
+                padding: const EdgeInsets.only(top: 40.0),
+                child: Text(
+                    'InsuWin',
+                    style: GoogleFonts.dmSans(
+                      textStyle: const TextStyle(
+                        color: Colors.greenAccent,
+                        fontSize: 40.0,
+                        shadows: [
+                          Shadow(
+                            color: Colors.black,
+                            offset: Offset(1.0, 1.0),
+                            
+                          ),
+                        ],
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+
+              ElevatedButton(
+          onPressed: () {
+            FirebaseAuth.instance.signOut();
+          },
+          child: const Text('Logout'),
+        ),
+
+
+          ],
+        )
+      
       ),
     );
   }
