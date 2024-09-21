@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:insulin_sensitivity_factor/firebase_options.dart';
+import 'register.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -15,224 +16,236 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final screenHeight = MediaQuery.of(context).size.height;
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'Login UI',
+      theme: ThemeData(
+        brightness: Brightness.dark,
+        primarySwatch: Colors.green,
+        textSelectionTheme: const TextSelectionThemeData(
+          cursorColor: Colors.white,
+          selectionColor: Colors.greenAccent,
+          selectionHandleColor: Colors.greenAccent,
+        ),
+      ),
+      home: const LoginPage(),
+    );
+  }
+}
+
+class LoginPage extends StatefulWidget {
+  const LoginPage({super.key});
+
+  @override
+  // ignore: library_private_types_in_public_api
+  _LoginPageState createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  bool rememberMe = false;
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
+  String errorMessage = ''; // For displaying error messages
+
+  @override
+  Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
       body: GestureDetector(
         onTap: () {
-          FocusScope.of(context).unfocus(); // Dismiss the keyboard when tapping outside
+          FocusScope.of(context).unfocus(); // Switch focus from the text fields
         },
         child: Stack(
           children: [
-            // Background image covering the entire screen height
-            SizedBox(
-              height: screenHeight,
-              width: screenWidth,
-              child: const DecoratedBox(
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage('assets/images/1053265.png'),
-                    fit: BoxFit.cover,
-                  ),
+            Container(
+              decoration: const BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage('assets/images/1053265.png'),
+                  fit: BoxFit.cover,
                 ),
               ),
             ),
-            // Dark overlay to enhance contrast
             Container(
-              height: screenHeight,
-              width: screenWidth,
               color: Colors.black.withOpacity(0.9),
             ),
-            // Scrollable content (if necessary) with fixed background
-            SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: SizedBox(
-                  height: screenHeight, // Ensure it takes the full height of the screen
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Text.rich(
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Text.rich(
+                    TextSpan(
+                      children: [
                         TextSpan(
-                          children: [
-                            TextSpan(
-                              text: 'Hello ',
-                              style: GoogleFonts.inter(
-                                fontSize: 48.0,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                              ),
-                            ),
-                            TextSpan(
-                              text: 'User!',
-                              style: GoogleFonts.inter(
-                                fontSize: 48.0,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.greenAccent,
-                              ),
-                            ),
-                          ],
+                          text: 'Hello ',
+                          style: GoogleFonts.inter(
+                            fontSize: 48.0,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
                         ),
-                      ),
-                      const SizedBox(height: 48.0),
-                      // Email input field
-                      SizedBox(
-                        width: screenWidth * 0.86,
-                        child: TextField(
-                          controller: emailController,
-                          style: const TextStyle(color: Colors.white),
-                          decoration: InputDecoration(
-                            prefixIcon: const Icon(
-                              Icons.email_outlined,
-                              color: Colors.white70,
-                              size: 18.0,
-                            ),
-                            labelText: 'Email',
-                            labelStyle: GoogleFonts.inter(color: Colors.white70),
-                            focusedBorder: const OutlineInputBorder(
-                              borderSide: BorderSide(
-                                  color: Colors.greenAccent, width: 1.0),
-                            ),
-                            enabledBorder: const OutlineInputBorder(
-                              borderSide:
+                        TextSpan(
+                          text: 'User!',
+                          style: GoogleFonts.inter(
+                            fontSize: 48.0,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.greenAccent,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 24.0),
+                  SizedBox(
+                    width: screenWidth * 0.86,
+                    child: TextField(
+                      controller: emailController,
+                      style: const TextStyle(color: Colors.white),
+                      decoration: InputDecoration(
+                        prefixIcon: const Icon(
+                          Icons.email_outlined,
+                          color: Colors.white70,
+                          size: 18.0,
+                        ),
+                        labelText: 'Email',
+                        labelStyle: GoogleFonts.inter(color: Colors.white70),
+                        focusedBorder: const OutlineInputBorder(
+                          borderSide:
+                              BorderSide(color: Colors.greenAccent, width: 1.0),
+                        ),
+                        enabledBorder: const OutlineInputBorder(
+                          borderSide:
                               BorderSide(color: Colors.white54, width: 1.0),
-                            ),
-                            filled: true,
-                            fillColor: Colors.black26,
-                          ),
                         ),
+                        filled: true,
+                        fillColor: Colors.black26,
                       ),
-                      const SizedBox(height: 16.0),
-                      // Password input field
-                      SizedBox(
-                        width: screenWidth * 0.86,
-                        child: TextField(
-                          controller: passwordController,
-                          style: const TextStyle(color: Colors.white),
-                          decoration: InputDecoration(
-                            prefixIcon: const Icon(
-                              Icons.lock_outline,
-                              color: Colors.white70,
-                              size: 18.0,
-                            ),
-                            labelText: 'Password',
-                            labelStyle: GoogleFonts.inter(color: Colors.white70),
-                            focusedBorder: const OutlineInputBorder(
-                              borderSide: BorderSide(
-                                  color: Colors.greenAccent, width: 1.0),
-                            ),
-                            enabledBorder: const OutlineInputBorder(
-                              borderSide:
+                    ),
+                  ),
+                  const SizedBox(height: 16.0),
+                  SizedBox(
+                    width: screenWidth * 0.86,
+                    child: TextField(
+                      controller: passwordController,
+                      style: const TextStyle(color: Colors.white),
+                      decoration: InputDecoration(
+                        prefixIcon: const Icon(
+                          Icons.lock_outline,
+                          color: Colors.white70,
+                          size: 18.0,
+                        ),
+                        labelText: 'Password',
+                        labelStyle: GoogleFonts.inter(color: Colors.white70),
+                        focusedBorder: const OutlineInputBorder(
+                          borderSide:
+                              BorderSide(color: Colors.greenAccent, width: 1.0),
+                        ),
+                        enabledBorder: const OutlineInputBorder(
+                          borderSide:
                               BorderSide(color: Colors.white54, width: 1.0),
-                            ),
-                            filled: true,
-                            fillColor: Colors.black26,
-                          ),
-                          obscureText: true,
                         ),
+                        filled: true,
+                        fillColor: Colors.black26,
                       ),
-                      const SizedBox(height: 16.0),
-                      // Remember me and forgot password row
+                      obscureText: true,
+                    ),
+                  ),
+                  const SizedBox(height: 16.0),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Row(
-                            children: [
-                              Container(
-                                height: 48.0,
-                                alignment: Alignment.centerLeft,
-                                child: Checkbox(
-                                  value: rememberMe,
-                                  onChanged: (bool? value) {
-                                    setState(() {
-                                      rememberMe = value ?? false;
-                                    });
-                                  },
-                                  activeColor: Colors.greenAccent,
-                                ),
-                              ),
-                              const SizedBox(width: 8.0),
-                              Text(
-                                'Remember me?',
-                                style: GoogleFonts.inter(color: Colors.white70),
-                              ),
-                            ],
-                          ),
-                          TextButton(
-                            onPressed: () {
-                              // Handle forgot password
-                            },
-                            child: Text(
-                              'Forgot password?',
-                              style: GoogleFonts.inter(
-                                  color: Colors.greenAccent,
-                                  fontWeight: FontWeight.w500),
+                          Container(
+                            height: 48.0,
+                            alignment: Alignment.centerLeft,
+                            child: Checkbox(
+                              value: rememberMe,
+                              onChanged: (bool? value) {
+                                setState(() {
+                                  rememberMe = value ?? false;
+                                });
+                              },
+                              activeColor: Colors.greenAccent,
                             ),
                           ),
-                        ],
-                      ),
-                      const SizedBox(height: 16.0),
-                      // Login button
-                      SizedBox(
-                        width: screenWidth * 0.5,
-                        height: 50.0,
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.greenAccent,
-                            elevation: 8.0,
-                            shape: RoundedRectangleBorder(
-                              borderRadius:
-                              BorderRadius.circular(12.0), // Rounded corners
-                            ),
-                          ),
-                          onPressed: () async {
-                            FocusScope.of(context).unfocus();
-                            await login();
-                          },
-                          child: Text(
-                            'LOGIN',
-                            style: GoogleFonts.inter(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 20.0,
-                              letterSpacing: 10.0,
-                            ),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 16.0),
-                      // Error message (if any)
-                      Text(
-                        errorMessage,
-                        style: const TextStyle(color: Colors.redAccent),
-                      ),
-                      const Spacer(), // Pushes the following to the bottom
-                      // "Don't have an account? Register" row
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
+                          const SizedBox(width: 8.0),
                           Text(
-                            "Don't have an account? ",
+                            'Remember me?',
                             style: GoogleFonts.inter(color: Colors.white70),
                           ),
-                          TextButton(
-                            onPressed: () {
-                              // Handle registration action
-                            },
-                            child: Text(
-                              'Register',
-                              style: GoogleFonts.inter(
-                                color: Colors.greenAccent,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ),
                         ],
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          // Handle forgot password
+                        },
+                        child: Text(
+                          'Forgot password?',
+                          style: GoogleFonts.inter(
+                              color: Colors.greenAccent,
+                              fontWeight: FontWeight.w500),
+                        ),
                       ),
                     ],
                   ),
-                ),
+                  const SizedBox(height: 16.0),
+                  SizedBox(
+                    width: screenWidth * 0.5,
+                    height: 50.0,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.greenAccent,
+                        elevation: 8.0,
+                        shape: RoundedRectangleBorder(
+                          borderRadius:
+                              BorderRadius.circular(12.0), // Rounded corners
+                        ),
+                      ),
+                      onPressed: () async {
+                        FocusScope.of(context).unfocus();
+                        await login();
+                      },
+                      child: Text(
+                        'LOGIN',
+                        style: GoogleFonts.inter(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20.0,
+                          letterSpacing: 10.0,
+                        ),
+                      ),
+                    ),
+                  ), // This pushes the widgets above upwards
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "Don't have an account?",
+                        style: GoogleFonts.inter(color: Colors.white70),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const RegisterPage()),
+                          ); // Handle registration action
+                        },
+                        child: Text(
+                          'Register Now',
+                          style: GoogleFonts.inter(
+                            color: Colors.greenAccent,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
             ),
           ],
@@ -240,7 +253,6 @@ class MyApp extends StatelessWidget {
       ),
     );
   }
-
 
   Future<void> login() async {
     final email = emailController.text.trim();
@@ -286,5 +298,4 @@ class MyApp extends StatelessWidget {
       );
     }
   }
-
 }
