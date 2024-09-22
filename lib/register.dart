@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -32,6 +34,7 @@ class _RegisterPageState extends State<RegisterPage> {
     final screenWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: GestureDetector(
         onTap: () {
           FocusScope.of(context).unfocus();
@@ -200,6 +203,7 @@ class _RegisterPageState extends State<RegisterPage> {
         'phone': phone,
         'dob': dob,
         'gender': gender,
+        'completedSetup': false,
       });
 
       // Show success message
