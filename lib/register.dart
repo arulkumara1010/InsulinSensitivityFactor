@@ -193,6 +193,10 @@ class _RegisterPageState extends State<RegisterPage> {
       User? user = userCredential.user;
 
       // Step 2: Store additional user data in Firestore
+      // Update displayName in Firebase Auth
+      
+
+      // Store additional user data in Firestore
       await _firestore.collection('users').doc(user?.uid).set({
         'uid': user?.uid,
         'name': name,
@@ -201,6 +205,10 @@ class _RegisterPageState extends State<RegisterPage> {
         'dob': dob,
         'gender': gender,
       });
+
+      await user?.updateDisplayName(name);
+      // Update display name in Firebase Authentication
+      await user?.updateProfile(displayName: name);
 
       // Show success message
       ScaffoldMessenger.of(context).showSnackBar(
@@ -313,14 +321,14 @@ class _RegisterPageState extends State<RegisterPage> {
           },
         );
 
-        if (pickedDate != null) {
-          setState(() {
+        setState(() {
+          if (pickedDate != null) {
             controller.text = "${pickedDate.day.toString().padLeft(2, '0')}/"
                 "${pickedDate.month.toString().padLeft(2, '0')}/"
                 "${pickedDate.year}";
-          });
-        }
-      },
+          }
+        });
+            },
       child: AbsorbPointer(
         child: SizedBox(
           width: MediaQuery.of(context).size.width * 0.86,

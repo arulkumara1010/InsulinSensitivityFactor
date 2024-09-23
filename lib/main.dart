@@ -4,6 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:insulin_sensitivity_factor/firebase_options.dart';
 import 'register.dart';
+import 'homepage.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -208,6 +209,7 @@ class _LoginPageState extends State<LoginPage> {
                       onPressed: () async {
                         FocusScope.of(context).unfocus();
                         await login();
+                        
                       },
                       child: Text(
                         'LOGIN',
@@ -286,9 +288,14 @@ class _LoginPageState extends State<LoginPage> {
         ),
       );
 
+      Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(builder: (context) => HomePage()),
+                        );
+
       // Perform further actions like navigation here
       // Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomePage()));
-    } on FirebaseAuthException catch (e) {
+    } on FirebaseAuthException {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Please enter valid credentials'),
