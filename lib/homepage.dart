@@ -98,10 +98,14 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
         ),
-        Container(
+        Positioned(
+          top: 40,
+          left: MediaQuery.of(context).size.width / 2 - 170,
+          
+          child: Container(
           width: 340,
           height: 45,
-          margin: const EdgeInsets.only(top: 40, left: 30),
+          
           child: Row(
             children: [
               if (isLoading)
@@ -169,13 +173,14 @@ class _HomePageState extends State<HomePage> {
             ],
           ),
         ),
+        ),
         Positioned(
           top: 250,
           left: MediaQuery.of(context).size.width / 2 -
               100, // Center horizontally
           child: Container(
-            width: 220,
-            height: 100,
+            width: 200,
+            height: MediaQuery.of(context).size.height * 0.27,
             child: Center(
               child: Text(
                 'Start your insulin journey with us...',
@@ -295,6 +300,7 @@ class Homepage2 extends StatefulWidget {
 class _Homepage2State extends State<Homepage2> {
   final TextEditingController weightController = TextEditingController();
   final TextEditingController heightController = TextEditingController();
+  final TextEditingController longactinginsulinController = TextEditingController();
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   late User user;
@@ -445,6 +451,12 @@ class _Homepage2State extends State<Homepage2> {
               const SizedBox(height: 16.0),
               _buildTextField(heightController, 'Height (in cm)', Icons.height,
                   keyboardType: TextInputType.number),
+              const SizedBox(height: 16.0),
+              _buildTextField(
+                  longactinginsulinController,
+                  'Long-Acting Insulin (in units)',
+                  Icons.medication,
+                  keyboardType: TextInputType.number),
             ],
           ),
         ),
@@ -460,12 +472,7 @@ class _Homepage2State extends State<Homepage2> {
           onPressed: () {
             // Handle continue button press
             heightweightUser();
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) =>
-                      const SetupPage()), // Replace NextPage with your next page widget
-            );
+            
           },
           style: ElevatedButton.styleFrom(
             backgroundColor: Colors.greenAccent, // Background color
@@ -491,11 +498,12 @@ class _Homepage2State extends State<Homepage2> {
   void heightweightUser() async {
     String weight = weightController.text.trim();
     String height = heightController.text.trim();
+    String longactinginsulin = longactinginsulinController.text.trim();
     
     // Basic validation (you can add more)
     if (weight.isEmpty ||
-        height.isEmpty) 
-        {
+        height.isEmpty || longactinginsulin.isEmpty) 
+    {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Please fill all fields'),
@@ -511,6 +519,7 @@ class _Homepage2State extends State<Homepage2> {
       await _firestore.collection('users').doc(user?.uid).update({
         'height': height,
         'weight': weight,
+        'longactinginsulin': longactinginsulin,
       });
 
      
@@ -522,6 +531,14 @@ class _Homepage2State extends State<Homepage2> {
           backgroundColor: Colors.greenAccent,
         ),
       );
+
+      Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) =>
+                      const SetupPage()
+                      ), // Replace NextPage with your next page widget
+            );
 
       // Navigate to the login page or clear the fields
 
