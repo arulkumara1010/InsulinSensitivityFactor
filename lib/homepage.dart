@@ -99,7 +99,7 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
         Container(
-          width: 350,
+          width: 340,
           height: 45,
           margin: const EdgeInsets.only(top: 40, left: 30),
           child: Row(
@@ -124,40 +124,41 @@ class _HomePageState extends State<HomePage> {
                     color: Colors.black,
                   ),
                 ),
-              const SizedBox(width: 40),
-              IconButton(
+              
+                Spacer(),
+                IconButton(
                 icon: const Icon(Icons.notifications, color: Colors.black),
                 onPressed: () {
                   // Handle bell icon press
                 },
-              ),
-              Container(
+                ),
+                Container(
                 width: 40,
                 height: 40,
                 decoration: BoxDecoration(
                   color: Colors.white,
                   shape: BoxShape.circle,
                   boxShadow: const [
-                    BoxShadow(
-                      color: Colors.black,
-                      blurRadius: 5,
-                      offset: Offset(0, 2),
-                    ),
+                  BoxShadow(
+                    color: Colors.black,
+                    blurRadius: 5,
+                    offset: Offset(0, 2),
+                  ),
                   ],
                 ),
                 child: Center(
                   child: Text(
-                    userData != null && userData!['initial'] != null
-                        ? userData!['initial']
-                        : '',
-                    style: GoogleFonts.inter(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
-                    ),
+                  userData != null && userData!['initial'] != null
+                    ? userData!['initial']
+                    : '',
+                  style: GoogleFonts.inter(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  ),
                   ),
                 ),
-              ),
+                ),
 
               /* IconButton(
                   icon: const Icon(Icons.person, color: Colors.black, size: 30,),
@@ -439,7 +440,7 @@ class _Homepage2State extends State<Homepage2> {
             children: [
               const SizedBox(height: 20.0),
               _buildTextField(
-                  weightController, 'Weight (in cm)', Icons.monitor_weight,
+                  weightController, 'Weight (in kg)', Icons.monitor_weight,
                   keyboardType: TextInputType.number),
               const SizedBox(height: 16.0),
               _buildTextField(heightController, 'Height (in cm)', Icons.height,
@@ -458,6 +459,7 @@ class _Homepage2State extends State<Homepage2> {
         child: ElevatedButton(
           onPressed: () {
             // Handle continue button press
+            heightweightUser();
             Navigator.push(
               context,
               MaterialPageRoute(
@@ -484,5 +486,49 @@ class _Homepage2State extends State<Homepage2> {
         ),
       ),
     ]));
+  }
+
+  void heightweightUser() async {
+    String weight = weightController.text.trim();
+    String height = heightController.text.trim();
+    
+    // Basic validation (you can add more)
+    if (weight.isEmpty ||
+        height.isEmpty) 
+        {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Please fill all fields'),
+          backgroundColor: Colors.redAccent,
+        ),
+      );
+      return;
+    }
+
+    try {
+      
+      // Store additional user data in Firestore
+      await _firestore.collection('users').doc(user?.uid).update({
+        'height': height,
+        'weight': weight,
+      });
+
+     
+
+      // Show success message
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Height and Weight entered successfully'),
+          backgroundColor: Colors.greenAccent,
+        ),
+      );
+
+      // Navigate to the login page or clear the fields
+
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error: $e')),
+      );
+    }
   }
 }
