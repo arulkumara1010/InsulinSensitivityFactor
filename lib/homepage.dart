@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously, library_private_types_in_public_api
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -37,7 +39,6 @@ class UserService {
 
 class _HomePageState extends State<HomePage> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   late User user;
   bool isloggedin = false;
   User? user1 = FirebaseAuth.instance.currentUser;
@@ -60,8 +61,8 @@ class _HomePageState extends State<HomePage> {
 
     if (firebaseUser != null) {
       setState(() {
-        this.user = firebaseUser as User;
-        this.isloggedin = true;
+        user = firebaseUser as User;
+        isloggedin = true;
       });
     }
   }
@@ -73,8 +74,8 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    this.checkAuthentification();
-    this.getUser();
+    checkAuthentification();
+    getUser();
     _loadUserData();
   }
 
@@ -101,84 +102,81 @@ class _HomePageState extends State<HomePage> {
         Positioned(
           top: 40,
           left: MediaQuery.of(context).size.width / 2 - 170,
-          
-          child: Container(
-          width: 340,
-          height: 45,
-          
-          child: Row(
-            children: [
-              if (isLoading)
-                const CircularProgressIndicator() // Show loading indicator while data is being fetched
-              else if (userData != null && userData!['name'] != null)
-                Text(
-                  "Hello ${userData!['name']}!",
-                  style: GoogleFonts.inter(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
+          child: SizedBox(
+            width: 340,
+            height: 45,
+            child: Row(
+              children: [
+                if (isLoading)
+                  const CircularProgressIndicator() // Show loading indicator while data is being fetched
+                else if (userData != null && userData!['name'] != null)
+                  Text(
+                    "Hello ${userData!['name']}!",
+                    style: GoogleFonts.inter(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
+                  )
+                else
+                  Text(
+                    "Hello!",
+                    style: GoogleFonts.inter(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
                   ),
-                )
-              else
-                Text(
-                  "Hello!",
-                  style: GoogleFonts.inter(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
-                  ),
-                ),
-              
-                Spacer(),
+                const Spacer(),
                 IconButton(
-                icon: const Icon(Icons.notifications, color: Colors.black),
-                onPressed: () {
-                  // Handle bell icon press
-                },
+                  icon: const Icon(Icons.notifications, color: Colors.black),
+                  onPressed: () {
+                    // Handle bell icon press
+                  },
                 ),
                 Container(
-                width: 40,
-                height: 40,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  shape: BoxShape.circle,
-                  boxShadow: const [
-                  BoxShadow(
-                    color: Colors.black,
-                    blurRadius: 5,
-                    offset: Offset(0, 2),
+                  width: 40,
+                  height: 40,
+                  decoration: const BoxDecoration(
+                    color: Colors.white,
+                    shape: BoxShape.circle,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black,
+                        blurRadius: 5,
+                        offset: Offset(0, 2),
+                      ),
+                    ],
                   ),
-                  ],
-                ),
-                child: Center(
-                  child: Text(
-                  userData != null && userData!['initial'] != null
-                    ? userData!['initial']
-                    : '',
-                  style: GoogleFonts.inter(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
+                  child: Center(
+                    child: Text(
+                      userData != null && userData!['initial'] != null
+                          ? userData!['initial']
+                          : '',
+                      style: GoogleFonts.inter(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      ),
+                    ),
                   ),
-                  ),
-                ),
                 ),
 
-              /* IconButton(
+                /* IconButton(
                   icon: const Icon(Icons.person, color: Colors.black, size: 30,),
                   onPressed: () {
                     //Navigator.pushNamed(context, "ProfilePage");
                   },
                 ), */
-            ],
+              ],
+            ),
           ),
-        ),
         ),
         Positioned(
           top: 250,
           left: MediaQuery.of(context).size.width / 2 -
               100, // Center horizontally
-          child: Container(
+          child: SizedBox(
             width: 200,
             height: MediaQuery.of(context).size.height * 0.27,
             child: Center(
@@ -248,7 +246,7 @@ class _HomePageState extends State<HomePage> {
             onPressed: () {
               Navigator.pushReplacement(
                 context,
-                MaterialPageRoute(builder: (context) => LoginPage()),
+                MaterialPageRoute(builder: (context) => const LoginPage()),
               );
             },
             style: ElevatedButton.styleFrom(
@@ -300,7 +298,8 @@ class Homepage2 extends StatefulWidget {
 class _Homepage2State extends State<Homepage2> {
   final TextEditingController weightController = TextEditingController();
   final TextEditingController heightController = TextEditingController();
-  final TextEditingController longactinginsulinController = TextEditingController();
+  final TextEditingController longactinginsulinController =
+      TextEditingController();
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   late User user;
@@ -353,8 +352,8 @@ class _Homepage2State extends State<Homepage2> {
 
     if (firebaseUser != null) {
       setState(() {
-        this.user = firebaseUser as User;
-        this.isloggedin = true;
+        user = firebaseUser as User;
+        isloggedin = true;
       });
     }
   }
@@ -366,8 +365,8 @@ class _Homepage2State extends State<Homepage2> {
   @override
   void initState() {
     super.initState();
-    this.checkAuthentification();
-    this.getUser();
+    checkAuthentification();
+    getUser();
     _loadUserData();
   }
 
@@ -452,10 +451,8 @@ class _Homepage2State extends State<Homepage2> {
               _buildTextField(heightController, 'Height (in cm)', Icons.height,
                   keyboardType: TextInputType.number),
               const SizedBox(height: 16.0),
-              _buildTextField(
-                  longactinginsulinController,
-                  'Long-Acting Insulin (in units)',
-                  Icons.medication,
+              _buildTextField(longactinginsulinController,
+                  'Long-Acting Insulin (in units)', Icons.medication,
                   keyboardType: TextInputType.number),
             ],
           ),
@@ -472,7 +469,6 @@ class _Homepage2State extends State<Homepage2> {
           onPressed: () {
             // Handle continue button press
             heightweightUser();
-            
           },
           style: ElevatedButton.styleFrom(
             backgroundColor: Colors.greenAccent, // Background color
@@ -498,12 +494,12 @@ class _Homepage2State extends State<Homepage2> {
   void heightweightUser() async {
     String weight = weightController.text.trim();
     String height = heightController.text.trim();
-    String longactinginsulin = longactinginsulinController.text.trim();
-    
+    int longactinginsulin = longactinginsulinController.text.trim() as int;
+
     // Basic validation (you can add more)
     if (weight.isEmpty ||
-        height.isEmpty || longactinginsulin.isEmpty) 
-    {
+        height.isEmpty ||
+        longactinginsulinController.text.trim().isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Please fill all fields'),
@@ -514,15 +510,12 @@ class _Homepage2State extends State<Homepage2> {
     }
 
     try {
-      
       // Store additional user data in Firestore
-      await _firestore.collection('users').doc(user?.uid).update({
+      await _firestore.collection('users').doc(user.uid).update({
         'height': height,
         'weight': weight,
         'longactinginsulin': longactinginsulin,
       });
-
-     
 
       // Show success message
       ScaffoldMessenger.of(context).showSnackBar(
@@ -533,15 +526,13 @@ class _Homepage2State extends State<Homepage2> {
       );
 
       Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) =>
-                      const SetupPage()
-                      ), // Replace NextPage with your next page widget
-            );
+        context,
+        MaterialPageRoute(
+            builder: (context) =>
+                const SetupPage()), // Replace NextPage with your next page widget
+      );
 
       // Navigate to the login page or clear the fields
-
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Error: $e')),
