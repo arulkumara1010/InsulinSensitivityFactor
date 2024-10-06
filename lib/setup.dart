@@ -5,6 +5,9 @@ import 'mealpage.dart'; // Import the MealSetupPage
 import 'homepage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
+import 'homepageaftersetup.dart';
+
+
 class SetupPage extends StatefulWidget {
   const SetupPage({super.key});
 
@@ -322,12 +325,18 @@ class _SetupPageState extends State<SetupPage> {
 
                       _calculateAndSaveAverageInsulin();
                       _updateCompletedSetup();
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const HomePage(),
-                        ),
-                      );
+
+
+                      Future.delayed(const Duration(milliseconds: 500), () {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => HomeScreen(),
+                          ),
+                        );
+                      });
+
+                     
                     }
                   });
                   _saveSetupData();
