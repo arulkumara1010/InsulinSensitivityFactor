@@ -494,15 +494,25 @@ class _Homepage2State extends State<Homepage2> {
   void heightweightUser() async {
     String weight = weightController.text.trim();
     String height = heightController.text.trim();
-    int longactinginsulin = longactinginsulinController.text.trim() as int;
+    String longActingInsulinText = longactinginsulinController.text.trim();
 
-    // Basic validation (you can add more)
-    if (weight.isEmpty ||
-        height.isEmpty ||
-        longactinginsulinController.text.trim().isEmpty) {
+    // Validate the input
+    if (weight.isEmpty || height.isEmpty || longActingInsulinText.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Please fill all fields'),
+          backgroundColor: Colors.redAccent,
+        ),
+      );
+      return;
+    }
+
+    // Try parsing long-acting insulin as an integer
+    int? longactinginsulin = int.tryParse(longActingInsulinText);
+    if (longactinginsulin == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Please enter a valid number for long-acting insulin'),
           backgroundColor: Colors.redAccent,
         ),
       );
@@ -525,14 +535,11 @@ class _Homepage2State extends State<Homepage2> {
         ),
       );
 
+      // Navigate to the setup page
       Navigator.push(
         context,
-        MaterialPageRoute(
-            builder: (context) =>
-                const SetupPage()), // Replace NextPage with your next page widget
+        MaterialPageRoute(builder: (context) => const SetupPage()),
       );
-
-      // Navigate to the login page or clear the fields
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Error: $e')),
