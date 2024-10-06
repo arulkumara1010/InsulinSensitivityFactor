@@ -4,6 +4,9 @@ import 'package:cloud_firestore/cloud_firestore.dart'; // Import Firestore
 import 'homepage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
+import 'homepageaftersetup.dart';
+
+
 class SetupPage extends StatefulWidget {
   const SetupPage({super.key});
 
@@ -268,7 +271,7 @@ class _SetupPageState extends State<SetupPage> {
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => const HomePage(),
+                            builder: (context) => HomeScreen(),
                           ),
                         );
                       });
