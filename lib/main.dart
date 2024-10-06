@@ -209,7 +209,6 @@ class _LoginPageState extends State<LoginPage> {
                       onPressed: () async {
                         FocusScope.of(context).unfocus();
                         await login();
-                        
                       },
                       child: Text(
                         'LOGIN',
@@ -289,9 +288,9 @@ class _LoginPageState extends State<LoginPage> {
       );
 
       Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(builder: (context) => HomePage()),
-                        );
+        context,
+        MaterialPageRoute(builder: (context) => HomePage()),
+      );
 
       // Perform further actions like navigation here
       // Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomePage()));

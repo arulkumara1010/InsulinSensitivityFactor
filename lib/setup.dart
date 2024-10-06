@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:cloud_firestore/cloud_firestore.dart'; // Import Firestore
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'mealpage.dart'; // Import the MealSetupPage
 import 'homepage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -25,42 +26,84 @@ class _SetupPageState extends State<SetupPage> {
   }
 
   Future<void> _loadSetupData() async {
-    final userId =
-        FirebaseAuth.instance.currentUser!.uid; // Get current user ID
+    final userId = FirebaseAuth.instance.currentUser!.uid;
     DocumentSnapshot userDoc =
         await FirebaseFirestore.instance.collection('users').doc(userId).get();
 
     if (userDoc.exists) {
       setState(() {
-        // Load data from Firestore
         dayCount = userDoc['dayCount'] ?? 1;
         mealCompleted =
             List<bool>.from(userDoc['mealCompleted'] ?? [false, false, false]);
       });
     } else {
-      // If user document doesn't exist, initialize it
       await FirebaseFirestore.instance.collection('users').doc(userId).set({
         'dayCount': 1,
         'mealCompleted': [false, false, false],
+        'days': {}, // Initialize empty days data
         'completedSetup': false,
+        'averageInsulin': 0.0
       });
     }
   }
 
   Future<void> _saveSetupData() async {
-    final userId =
-        FirebaseAuth.instance.currentUser!.uid; // Get current user ID
+    final userId = FirebaseAuth.instance.currentUser!.uid;
     await FirebaseFirestore.instance.collection('users').doc(userId).update({
       'dayCount': dayCount,
       'mealCompleted': mealCompleted,
     });
   }
 
+  Future<void> _saveMealInsulinData(
+      String day, String meal, String insulin) async {
+    final userId = FirebaseAuth.instance.currentUser!.uid;
+
+    await FirebaseFirestore.instance.collection('users').doc(userId).set({
+      'days': {
+        day: {
+          meal: int.parse(insulin),
+        }
+      }
+    }, SetOptions(merge: true)); // Merge with existing data
+  }
+
+  Future<void> _calculateAndSaveAverageInsulin() async {
+    final userId = FirebaseAuth.instance.currentUser!.uid;
+    DocumentSnapshot userDoc =
+        await FirebaseFirestore.instance.collection('users').doc(userId).get();
+
+    if (userDoc.exists) {
+      Map<String, dynamic> days = userDoc['days'];
+      int totalInsulin = 0;
+      int mealCount = 0;
+
+      days.forEach((day, meals) {
+        meals.forEach((meal, insulin) {
+          totalInsulin += insulin as int;
+          mealCount++;
+        });
+      });
+
+      double averageInsulin = totalInsulin / 3;
+      print(averageInsulin);
+      double longActingInsulin = userDoc['longactinginsulin'] ?? 0.0;
+      print(longActingInsulin);
+      double choRatio = 500 / (longActingInsulin + averageInsulin);
+      double correctionFactor = 1800 / (longActingInsulin + averageInsulin);
+
+      await FirebaseFirestore.instance.collection('users').doc(userId).set({
+        'averageInsulin': averageInsulin,
+        'choRatio': choRatio,
+        'correctionFactor': correctionFactor
+      });
+    }
+  }
+
   Future<void> _updateCompletedSetup() async {
-    final userId =
-        FirebaseAuth.instance.currentUser!.uid; // Get current user ID
+    final userId = FirebaseAuth.instance.currentUser!.uid;
     await FirebaseFirestore.instance.collection('users').doc(userId).update({
-      'completedSetup': true, // Set completedSetup to true
+      'completedSetup': true,
     });
   }
 
@@ -186,12 +229,20 @@ class _SetupPageState extends State<SetupPage> {
 
   Widget _buildButton(double screenWidth, String title, int index) {
     bool isCompleted = mealCompleted[index];
+    String meal = title.toLowerCase();
+    String day = 'day$dayCount';
 
     return SizedBox(
       width: screenWidth * 0.86,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
           backgroundColor: isCompleted ? Colors.greenAccent : Colors.white,
+          foregroundColor: isCompleted
+              ? Colors.white
+              : Colors.black, // Change text color when completed
+          disabledBackgroundColor:
+              Colors.greenAccent, // Set color when disabled
+          disabledForegroundColor: Colors.white, // Set text color when disabled
           side: BorderSide(
               width: 2.0,
               color: isCompleted ? Colors.transparent : Colors.greenAccent),
@@ -201,12 +252,24 @@ class _SetupPageState extends State<SetupPage> {
           ),
           padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
         ),
-        onPressed: () {
-          setState(() {
-            mealCompleted[index] = true; // Mark meal as completed
-          });
-          _saveSetupData(); // Save the state
-        },
+        onPressed: isCompleted
+            ? null
+            : () async {
+                final insulinData = await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => MealSetupPage(mealName: title),
+                  ),
+                );
+
+                if (insulinData != null) {
+                  _saveMealInsulinData(day, meal, insulinData);
+                  setState(() {
+                    mealCompleted[index] = true;
+                  });
+                  _saveSetupData();
+                }
+              },
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -251,11 +314,7 @@ class _SetupPageState extends State<SetupPage> {
                   setState(() {
                     if (dayCount < 3) {
                       dayCount++;
-                      mealCompleted = [
-                        false,
-                        false,
-                        false
-                      ]; // Reset meal completion
+                      mealCompleted = [false, false, false];
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
@@ -264,8 +323,9 @@ class _SetupPageState extends State<SetupPage> {
                         ),
                       );
 
-                      // Update completedSetup status in Firestore
+                      _calculateAndSaveAverageInsulin();
                       _updateCompletedSetup();
+
 
                       Future.delayed(const Duration(milliseconds: 500), () {
                         Navigator.pushReplacement(
@@ -275,17 +335,15 @@ class _SetupPageState extends State<SetupPage> {
                           ),
                         );
                       });
+
+                     
                     }
                   });
-                  _saveSetupData(); // Save the state
+                  _saveSetupData();
                 },
                 child: Text(
-                  dayCount < 3 ? 'NEXT' : 'SUBMIT',
-                  style: GoogleFonts.inter(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16.0,
-                    letterSpacing: 2.0,
-                  ),
+                  dayCount < 3 ? 'Next Day' : 'Complete',
+                  style: GoogleFonts.inter(fontSize: 16.0),
                 ),
               ),
             ),
