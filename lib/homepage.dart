@@ -195,12 +195,21 @@ class _HomePageState extends State<HomePage> {
         Center(
           child: ElevatedButton(
             onPressed: () {
-              // Handle button press
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const Homepage2()),
-              );
-              print("Button Pressed");
+              if (userData != null &&
+                  userData!['height'] != null &&
+                  userData!['weight'] != null) {
+                // If height and weight are already entered, go to SetupPage
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const SetupPage()),
+                );
+              } else {
+                // Otherwise, go to Homepage2 to input data
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const Homepage2()),
+                );
+              }
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.greenAccent, // Background color
@@ -419,7 +428,7 @@ class _Homepage2State extends State<Homepage2> {
       Positioned(
         top: 200,
         left: 50, // Center horizontally
-        child: Container(
+        child: SizedBox(
           width: 270,
           height: 25,
           child: Text(

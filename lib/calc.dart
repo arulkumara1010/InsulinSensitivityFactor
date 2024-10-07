@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api
+
 import 'package:flutter/material.dart';
 
 class CalculateInsulinPage extends StatefulWidget {
@@ -41,7 +43,7 @@ class _CalculateInsulinPageState extends State<CalculateInsulinPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Calculate Insulin Dosage'),
+        title: const Text('Calculate Insulin Dosage'),
         backgroundColor: Colors.pink.shade200,
       ),
       body: Padding(
@@ -53,8 +55,8 @@ class _CalculateInsulinPageState extends State<CalculateInsulinPage> {
             children: <Widget>[
               // Carbs input field
               TextFormField(
-                decoration:
-                    InputDecoration(labelText: 'Total Carbs in Meal (grams)'),
+                decoration: const InputDecoration(
+                    labelText: 'Total Carbs in Meal (grams)'),
                 keyboardType: TextInputType.number,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -66,11 +68,11 @@ class _CalculateInsulinPageState extends State<CalculateInsulinPage> {
                   carbs = double.parse(value!);
                 },
               ),
-              SizedBox(height: 16.0),
+              const SizedBox(height: 16.0),
 
               // Insulin-to-carb ratio input field
               TextFormField(
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                     labelText: 'Insulin to Carb Ratio (e.g. 1:10)'),
                 keyboardType: TextInputType.number,
                 validator: (value) {
@@ -83,12 +85,12 @@ class _CalculateInsulinPageState extends State<CalculateInsulinPage> {
                   insulinToCarbRatio = double.parse(value!);
                 },
               ),
-              SizedBox(height: 16.0),
+              const SizedBox(height: 16.0),
 
               // Current blood sugar input field
               TextFormField(
-                decoration:
-                    InputDecoration(labelText: 'Current Blood Sugar (mg/dL)'),
+                decoration: const InputDecoration(
+                    labelText: 'Current Blood Sugar (mg/dL)'),
                 keyboardType: TextInputType.number,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -100,12 +102,12 @@ class _CalculateInsulinPageState extends State<CalculateInsulinPage> {
                   currentBloodSugar = double.parse(value!);
                 },
               ),
-              SizedBox(height: 16.0),
+              const SizedBox(height: 16.0),
 
               // Target blood sugar input field
               TextFormField(
-                decoration:
-                    InputDecoration(labelText: 'Target Blood Sugar (mg/dL)'),
+                decoration: const InputDecoration(
+                    labelText: 'Target Blood Sugar (mg/dL)'),
                 keyboardType: TextInputType.number,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -117,11 +119,11 @@ class _CalculateInsulinPageState extends State<CalculateInsulinPage> {
                   targetBloodSugar = double.parse(value!);
                 },
               ),
-              SizedBox(height: 16.0),
+              const SizedBox(height: 16.0),
 
               // Correction factor input field
               TextFormField(
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                     labelText: 'Correction Factor (mg/dL per unit of insulin)'),
                 keyboardType: TextInputType.number,
                 validator: (value) {
@@ -134,7 +136,7 @@ class _CalculateInsulinPageState extends State<CalculateInsulinPage> {
                   correctionFactor = double.parse(value!);
                 },
               ),
-              SizedBox(height: 20.0),
+              const SizedBox(height: 20.0),
 
               // Calculate button
               Center(
@@ -145,16 +147,17 @@ class _CalculateInsulinPageState extends State<CalculateInsulinPage> {
                       calculateInsulin();
                     }
                   },
-                  child: Text('Calculate'),
                   style: ElevatedButton.styleFrom(),
+                  child: const Text('Calculate'),
                 ),
               ),
 
               // Result display
-              SizedBox(height: 20.0),
+              const SizedBox(height: 20.0),
               Text(
                 resultText,
-                style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
+                style: const TextStyle(
+                    fontSize: 20.0, fontWeight: FontWeight.bold),
               ),
             ],
           ),

@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -7,7 +9,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   if (kIsWeb) {
     await Firebase.initializeApp(
-        options: FirebaseOptions(
+        options: const FirebaseOptions(
             apiKey: "AIzaSyCnO8N9FyhBCO9XqdOAN2zz1WKWuZAu1sI",
             authDomain: "insulinsensitivityfactor-1ba83.firebaseapp.com",
             projectId: "insulinsensitivityfactor-1ba83",
@@ -41,9 +43,9 @@ class _EditProfileState extends State<EditProfile> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Edit Profile"),
+        title: const Text("Edit Profile"),
         leading: IconButton(
-          icon: Icon(
+          icon: const Icon(
             Icons.arrow_back,
             color: Colors.black,
           ),
@@ -51,7 +53,7 @@ class _EditProfileState extends State<EditProfile> {
         ),
       ),
       body: Container(
-        padding: EdgeInsets.only(left: 15, top: 20, right: 15),
+        padding: const EdgeInsets.only(left: 15, top: 20, right: 15),
         child: GestureDetector(
           onTap: () {
             FocusScope.of(context).unfocus();
@@ -74,7 +76,7 @@ class _EditProfileState extends State<EditProfile> {
                           ),
                         ],
                         shape: BoxShape.circle,
-                        image: DecorationImage(
+                        image: const DecorationImage(
                           fit: BoxFit.cover,
                           image: AssetImage("assets/images/female.png"),
                         ),
@@ -83,7 +85,7 @@ class _EditProfileState extends State<EditProfile> {
                   ],
                 ),
               ),
-              SizedBox(height: 30),
+              const SizedBox(height: 30),
               buildTextField("Name", "Enter your name"),
               buildTextField("Email", "Enter your email"),
               buildTextField("Age", "Enter your age"),
@@ -91,7 +93,7 @@ class _EditProfileState extends State<EditProfile> {
               buildTextField("Weight", "Enter your weight"),
               buildPasswordField("Password", "Enter your password"),
               buildPasswordField("Confirm Password", "Re-enter your password"),
-              SizedBox(height: 30),
+              const SizedBox(height: 30),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -99,7 +101,7 @@ class _EditProfileState extends State<EditProfile> {
                     onPressed: () {
                       // Save profile changes logic
                     },
-                    child: Text("Save"),
+                    child: const Text("Save"),
                   ),
                 ],
               ),
@@ -113,14 +115,14 @@ class _EditProfileState extends State<EditProfile> {
   // Helper method to build text fields
   Widget buildTextField(String labelText, String placeholder) {
     return Padding(
-      padding: EdgeInsets.only(bottom: 30),
+      padding: const EdgeInsets.only(bottom: 30),
       child: TextField(
         decoration: InputDecoration(
-          contentPadding: EdgeInsets.only(bottom: 5),
+          contentPadding: const EdgeInsets.only(bottom: 5),
           labelText: labelText,
           floatingLabelBehavior: FloatingLabelBehavior.always,
           hintText: placeholder,
-          hintStyle: TextStyle(
+          hintStyle: const TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.bold,
             color: Colors.grey,
@@ -133,15 +135,15 @@ class _EditProfileState extends State<EditProfile> {
   // Helper method to build password fields
   Widget buildPasswordField(String labelText, String placeholder) {
     return Padding(
-      padding: EdgeInsets.only(bottom: 30),
+      padding: const EdgeInsets.only(bottom: 30),
       child: TextField(
         obscureText: !showPassword, // hide password text
         decoration: InputDecoration(
-          contentPadding: EdgeInsets.only(bottom: 5),
+          contentPadding: const EdgeInsets.only(bottom: 5),
           labelText: labelText,
           floatingLabelBehavior: FloatingLabelBehavior.always,
           hintText: placeholder,
-          hintStyle: TextStyle(
+          hintStyle: const TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.bold,
             color: Colors.grey,

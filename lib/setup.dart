@@ -1,12 +1,12 @@
+// ignore_for_file: library_private_types_in_public_api, use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'mealpage.dart'; // Import the MealSetupPage
-import 'homepage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import 'homepageaftersetup.dart';
-
 
 class SetupPage extends StatefulWidget {
   const SetupPage({super.key});
@@ -76,6 +76,7 @@ class _SetupPageState extends State<SetupPage> {
     if (userDoc.exists) {
       Map<String, dynamic> days = userDoc['days'];
       int totalInsulin = 0;
+      // ignore: unused_local_variable
       int mealCount = 0;
 
       days.forEach((day, meals) {
@@ -326,17 +327,14 @@ class _SetupPageState extends State<SetupPage> {
                       _calculateAndSaveAverageInsulin();
                       _updateCompletedSetup();
 
-
                       Future.delayed(const Duration(milliseconds: 500), () {
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => HomeScreen(),
+                            builder: (context) => const HomeScreen(),
                           ),
                         );
                       });
-
-                     
                     }
                   });
                   _saveSetupData();

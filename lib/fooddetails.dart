@@ -1,3 +1,9 @@
+
+
+// ignore_for_file: use_key_in_widget_constructors
+
+
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'summary.dart';
@@ -160,9 +166,7 @@ class MyTab extends StatelessWidget {
   Widget build(BuildContext context) {
     return Tab(
       height: 80,
-      child: Container(
-        child: Image.asset(imagePath),
-      ),
+      child: Image.asset(imagePath),
     );
   }
 }
@@ -184,6 +188,7 @@ class BreakfastTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return GridView.builder(
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
@@ -402,6 +407,9 @@ class _FoodItemTitleState extends State<FoodItemTitle> {
           ],
         ),
       ),
+
+   
+
     );
   }
 }

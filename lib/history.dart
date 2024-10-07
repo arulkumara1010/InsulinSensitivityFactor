@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'food.dart'; // Import the MealDetailPage
 
-
 class FoodHistoryPage extends StatelessWidget {
   final List<Map<String, dynamic>> foodHistory = [
     {
@@ -167,7 +166,7 @@ void main() {
     theme: ThemeData(
       brightness: Brightness.light,
       primarySwatch: Colors.green,
-      scaffoldBackgroundColor: Color.fromARGB(255, 216, 247, 227),
+      scaffoldBackgroundColor: const Color.fromARGB(255, 216, 247, 227),
       appBarTheme: AppBarTheme(
         color: Colors.green.shade200,
       ),
