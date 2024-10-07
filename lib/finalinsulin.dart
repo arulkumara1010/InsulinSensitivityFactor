@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'homepageaftersetup.dart';
 
 class InsulinDosagePage extends StatelessWidget {
   final double insulinDosage;
 
-  const InsulinDosagePage({required this.insulinDosage, Key? key}) : super(key: key);
+  const InsulinDosagePage({required this.insulinDosage, Key? key})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +27,8 @@ class InsulinDosagePage extends StatelessWidget {
             children: [
               const SizedBox(height: 50), // Adjust as necessary for spacing
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 36.0, vertical: 18),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 36.0, vertical: 18),
                 child: Row(
                   children: [
                     Expanded(
@@ -71,17 +74,23 @@ class InsulinDosagePage extends StatelessWidget {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 36.0),
+                padding: const EdgeInsets.symmetric(
+                    vertical: 16.0, horizontal: 36.0),
                 child: ElevatedButton(
                   onPressed: () {
-                    Navigator.pop(context); // Go back to the previous page
+                     Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => HomeScreen()),
+                    );// Go back to the previous page
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.greenAccent, // Background color
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12), // Rounded corners
+                      borderRadius:
+                          BorderRadius.circular(12), // Rounded corners
                     ),
-                    padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 30, vertical: 15),
                   ),
                   child: Text(
                     "BACK",
