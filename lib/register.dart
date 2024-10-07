@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api, use_build_context_synchronously
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -194,7 +196,6 @@ class _RegisterPageState extends State<RegisterPage> {
 
       // Step 2: Store additional user data in Firestore
       // Update displayName in Firebase Auth
-      
 
       // Store additional user data in Firestore
       await _firestore.collection('users').doc(user?.uid).set({
@@ -328,7 +329,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 "${pickedDate.year}";
           }
         });
-            },
+      },
       child: AbsorbPointer(
         child: SizedBox(
           width: MediaQuery.of(context).size.width * 0.86,

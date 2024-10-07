@@ -1,4 +1,5 @@
-import 'package:flutter/foundation.dart';
+// ignore_for_file: use_key_in_widget_constructors
+
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/material.dart';
 import 'package:insulin_sensitivity_factor/tab/b_tab.dart';
@@ -37,9 +38,7 @@ class MyTab extends StatelessWidget {
   Widget build(BuildContext context) {
     return Tab(
       height: 80,
-      child: Container(
-        child: Image.asset(imagePath),
-      ),
+      child: Image.asset(imagePath),
     );
   }
 }
@@ -57,70 +56,69 @@ class _FooddetailsPageState extends State<FooddetailsPage> {
     return DefaultTabController(
       length: myTabs.length,
       child: Scaffold(
-        
-        body: Stack(
-          children: [
-
-            
-            
-            Container(
-          decoration: const BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage("assets/images/background.png"),
-              fit: BoxFit.cover,
+          body: Stack(
+        children: [
+          Container(
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage("assets/images/background.png"),
+                fit: BoxFit.cover,
+              ),
             ),
           ),
-        ),
-            
-            Column(
-          
-          children: [
-            const SizedBox(height: 35),
-            Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 36.0, vertical: 18),
-              child: Row(
-                children:  [
-
-                  Text(
-                    'I want to ',
-                    style: GoogleFonts.inter(fontSize: 24, fontWeight: FontWeight.w500, color: Colors.black),
-                  ),
-                  Text(
-                    ' EAT',
-                    style: GoogleFonts.inter(fontSize: 32, fontWeight: FontWeight.w600, color: Colors.black),
-                  ),
-                ],
+          Column(
+            children: [
+              const SizedBox(height: 35),
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 36.0, vertical: 18),
+                child: Row(
+                  children: [
+                    Text(
+                      'I want to ',
+                      style: GoogleFonts.inter(
+                          fontSize: 24,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.black),
+                    ),
+                    Text(
+                      ' EAT',
+                      style: GoogleFonts.inter(
+                          fontSize: 32,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.black),
+                    ),
+                  ],
+                ),
               ),
-            ),
-            const SizedBox(height: 20),
-            TabBar(tabs: myTabs),
-            const SizedBox(height: 20),
-            Expanded(
-              child: TabBarView(
-                children: [
-                  BreakfastTab(),
-                  DessertTab(),
-                  RiceTab(),
-                  DrinkTab(),
-                ],
+              const SizedBox(height: 20),
+              TabBar(tabs: myTabs),
+              const SizedBox(height: 20),
+              Expanded(
+                child: TabBarView(
+                  children: [
+                    BreakfastTab(),
+                    DessertTab(),
+                    RiceTab(),
+                    DrinkTab(),
+                  ],
+                ),
               ),
-            ),
-            // Add the NEXT button here if needed
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 16.0),
-              child: ElevatedButton(
-                  onPressed: () {},
-                  child: const Text(
-                    "NEXT",
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                  )),
-            ),
-          ],
-        ),
-          ],
-        )
-      ),
+              // Add the NEXT button here if needed
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 16.0),
+                child: ElevatedButton(
+                    onPressed: () {},
+                    child: const Text(
+                      "NEXT",
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    )),
+              ),
+            ],
+          ),
+        ],
+      )),
     );
   }
 }

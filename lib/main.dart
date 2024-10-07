@@ -1,8 +1,12 @@
+// ignore_for_file: use_build_context_synchronously
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:insulin_sensitivity_factor/firebase_options.dart';
+import 'package:insulin_sensitivity_factor/homepageaftersetup.dart';
 import 'register.dart';
 import 'homepage.dart';
 
@@ -273,27 +277,35 @@ class _LoginPageState extends State<LoginPage> {
 
     try {
       // Attempt to sign in the user
-      await _auth.signInWithEmailAndPassword(
+      UserCredential userCredential = await _auth.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
 
-      // On successful login, show SnackBar
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Login successful!'),
-          backgroundColor: Colors.greenAccent,
-          duration: Duration(seconds: 2),
-        ),
-      );
+      // On successful login, check the completedSetup flag in Firestore
+      final userId = userCredential.user!.uid;
+      final userDoc = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userId)
+          .get();
 
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => HomePage()),
-      );
+      if (userDoc.exists) {
+        bool completedSetup = userDoc.data()?['completedSetup'] ?? false;
 
-      // Perform further actions like navigation here
-      // Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomePage()));
+        if (completedSetup) {
+          // Navigate to HomeScreen if setup is complete
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => const HomeScreen()),
+          );
+        } else {
+          // Otherwise, navigate to HomePage
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => const HomePage()),
+          );
+        }
+      }
     } on FirebaseAuthException {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(

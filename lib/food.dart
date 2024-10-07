@@ -4,7 +4,7 @@ class MealDetailPage extends StatelessWidget {
   final String date;
   final List<Map<String, dynamic>> meals;
 
-  MealDetailPage({required this.date, required this.meals});
+  const MealDetailPage({required this.date, required this.meals});
 
   @override
   Widget build(BuildContext context) {

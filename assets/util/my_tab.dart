@@ -5,13 +5,13 @@ class MyTab extends StatelessWidget {
 
   const MyTab({super.key, required this.iconPath});
 
+  @override
   Widget build(BuildContext context) {
     return Tab(
         height: 80,
-        child: Container(
-            child: Image.asset(
+        child: Image.asset(
           iconPath,
           color: Colors.grey[600],
-        )));
+        ));
   }
 }

@@ -1,5 +1,8 @@
+// ignore_for_file: library_private_types_in_public_api
+
 import 'package:flutter/material.dart';
 
+// ignore: use_key_in_widget_constructors
 class DessertTab extends StatelessWidget {
   final List dessert = [
     ["Cookies", "assets/images/cookies.png", Colors.red],
