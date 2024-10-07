@@ -85,15 +85,12 @@ class _SetupPageState extends State<SetupPage> {
           mealCount++;
         });
       });
-
       double averageInsulin = totalInsulin / 3;
-      print(averageInsulin);
-      double longActingInsulin = userDoc['longactinginsulin'] ?? 0.0;
-      print(longActingInsulin);
+      double longActingInsulin = (userDoc['longactinginsulin'] ?? 0).toDouble();
       double choRatio = 500 / (longActingInsulin + averageInsulin);
       double correctionFactor = 1800 / (longActingInsulin + averageInsulin);
 
-      await FirebaseFirestore.instance.collection('users').doc(userId).set({
+      await FirebaseFirestore.instance.collection('users').doc(userId).update({
         'averageInsulin': averageInsulin,
         'choRatio': choRatio,
         'correctionFactor': correctionFactor
